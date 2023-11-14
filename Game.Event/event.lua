@@ -51,12 +51,13 @@ function Event.addListener (event, funcname)
     local registerd = Event.regiterd
     local exist = false
     for i = 1, #registerd do
-        if registerd[i] then
+        if registerd[i] == event then
             exist = true break
         end
     end
     if not exist then
-        Event.register(funcname)
+        Event.register(event)
+        registerd[#registerd+1] = event
     end
     table.insert(Event[event], funcname)
 end
