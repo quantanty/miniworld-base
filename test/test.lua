@@ -9,3 +9,4 @@ Functions["sayHello"] = sayHello
 
 
 Event.addListener("Player.NewInputContent", "sayHello")
+print("ok")
