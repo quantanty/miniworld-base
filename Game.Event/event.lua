@@ -1,4 +1,3 @@
-local Functions = {}
 local Event = {
     ["Weather.Changed"] = {},
     ["Backpack.ItemTakeOut"] = {},
@@ -30,7 +29,7 @@ function Event.register(eventString)
     ScriptSupportEvent:registerEvent(eventString, function (event)
         local funcs = Event[eventString]
         for i = 1, #funcs do
-            Functions[funcs[i]](event)
+            Function[funcs[i]](event)
         end
     end)
 end
@@ -40,7 +39,7 @@ function Event.registerAll()
         ScriptSupportEvent:registerEvent(eventString, function (event)
             local funcs = Event[eventString]
             for i = 1, #funcs do
-                Functions[funcs[i]](event)
+                Function[funcs[i]](event)
             end
         end)
     end
@@ -73,4 +72,3 @@ function Event.removeListener (event, funcname)
 end
 
 _G.Event = Event
-_G.Functions = Functions
