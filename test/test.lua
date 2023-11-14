@@ -1,5 +1,6 @@
-local Event = _G.Event
-local Functions = _G.Functions
+local v = _G
+local Event = v.Event
+local Functions = v.Function
 
 local function sayHello()
     Chat:sendSystemMsg("Hello!!")
