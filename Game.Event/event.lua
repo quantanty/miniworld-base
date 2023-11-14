@@ -1,7 +1,15 @@
 local Functions = {}
 local Event = {
-    ["Game.Run"] = {},
+    ["Weather.Changed"] = {},
+    ["Backpack.ItemTakeOut"] = {},
+    ["Backpack.ItemPutIn"] = {},
+    ["Backpack.ItemChange"] = {},
+    ["Game.AnyPlayer.Defeat"] = {},
     ["Game.AnyPlayer.EnterGame"] = {},
+    ["Game.AnyPlayer.LeaveGame"] = {},
+    ["Game.AnyPlayer.ReadStage"] = {},
+    ["Game.AnyPlayer.Victory"] = {},
+    ["Game.Run"] = {},
     ["Player.NewInputContent"] = {},
     ["UI.Button.click"] = {},
     ["UI.Touch.begin"] = {},
@@ -17,16 +25,10 @@ function Event.removeListener (event, func)
     for i = 1, #funcs do
         if funcs[i].__tostring == funcs.__tostring then
             table.remove(funcs, i)
-            print("xoa event")
             break
-        else
-            print(string.len(funcs[i]))
-            print(string.len(func))
-
         end
     end
 end
 
 _G.Event = Event
 _G.Functions = Functions
-print("Event: ", Event)
