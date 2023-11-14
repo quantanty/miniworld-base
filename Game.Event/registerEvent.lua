@@ -1,11 +1,22 @@
 local Event = _G.Event
 local Functions = _G.Functions
 
-ScriptSupportEvent:registerEvent("Player.NewInputContent", function (event)
-    local funcs = Event["Player.NewInputContent"]
-    for i = 1, #funcs do
-        Functions[funcs[i]](event)
-    end
-end)
+function Event.register(eventString)
+    ScriptSupportEvent:registerEvent(eventString, function (event)
+        local funcs = Event[eventString]
+        for i = 1, #funcs do
+            Functions[funcs[i]](event)
+        end
+    end)
+end
 
-Chat:sendSystemMsg("Event done")
+function Event.registerAll()
+    for eventString, v in ipairs(Event) do
+        ScriptSupportEvent:registerEvent(eventString, function (event)
+            local funcs = Event[eventString]
+            for i = 1, #funcs do
+                Functions[funcs[i]](event)
+            end
+        end)
+    end
+end
