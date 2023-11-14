@@ -7,5 +7,8 @@ local function sayHello()
 end
 Functions["sayHello"] = sayHello
 
+-- register events
+Event.register("Player.NewInputContent")
 
+-- add listener
 Event.addListener("Player.NewInputContent", "sayHello")
