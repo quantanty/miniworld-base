@@ -23,17 +23,48 @@ local Event = {
     ["Player.NewInputContent"] = {},
     ["UI.Button.click"] = {},
     ["UI.Touch.begin"] = {},
+    regiterd = {}
 }
 
-
-function Event.addListener (event, func)
-    table.insert(Event[event], func)
+function Event.register(eventString)
+    ScriptSupportEvent:registerEvent(eventString, function (event)
+        local funcs = Event[eventString]
+        for i = 1, #funcs do
+            Functions[funcs[i]](event)
+        end
+    end)
 end
 
-function Event.removeListener (event, func)
+function Event.registerAll()
+    for eventString, v in ipairs(Event) do
+        ScriptSupportEvent:registerEvent(eventString, function (event)
+            local funcs = Event[eventString]
+            for i = 1, #funcs do
+                Functions[funcs[i]](event)
+            end
+        end)
+    end
+end
+
+
+function Event.addListener (event, funcname)
+    local registerd = Event.regiterd
+    local exist = false
+    for i = 1, #registerd do
+        if registerd[i] then
+            exist = true break
+        end
+    end
+    if not exist then
+        Event.register(funcname)
+    end
+    table.insert(Event[event], funcname)
+end
+
+function Event.removeListener (event, funcname)
     local funcs = Event[event]
     for i = 1, #funcs do
-        if funcs[i].__tostring == funcs.__tostring then
+        if funcs[i] == funcname then
             table.remove(funcs, i)
             break
         end
