@@ -1,0 +1,27 @@
+{
+    "Lua.diagnostics.globals": [
+        "ScriptSupportEvent",
+        "GameRule",
+        "World",
+        "Game",
+        "Block",
+        "Actor",
+        "Player",
+        "Creature",
+        "UI",
+        "Area",
+        "Chat",
+        "Team",
+        "Item",
+        "Backpack",
+        "VarLib2",
+        "WorldContainer",
+        "MapMark",
+        "Spawnport",
+        "MiniTimer",
+        "ObjectLib",
+        "Graphics",
+        "ListenParam ",
+        "Customui",
+    ]
+}
