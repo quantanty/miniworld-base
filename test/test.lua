@@ -2,7 +2,7 @@ local v = _G
 local Event = v.Event
 local Function = v.Function
 
-local function sayHello()
+local function sayHello(event)
     Chat:sendSystemMsg("Hello!!")
     Event.removeListener("Player.NewInputContent", "sayHello")
 end
