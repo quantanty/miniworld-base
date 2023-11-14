@@ -1,3 +1,7 @@
+local v = _G
+local ScriptSupportEvent = ScriptSupportEvent
+local Function = v.Function
+
 local Event = {
     ["Weather.Changed"] = {},
     ["Backpack.ItemTakeOut"] = {},
