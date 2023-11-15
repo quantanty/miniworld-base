@@ -1,5 +1,5 @@
 local v = _G
-local Function = v.Function
+-- local Function = v.Function
 local Event = v.Event
 local BaseUI = v.BaseUI
 
@@ -23,6 +23,6 @@ local function dat(event)
     ui1:setTextureAll(btn1, [[30202]])
     ui1:showElementAll(btn1)
 end
-Function["dat"] = dat
+-- Function["dat"] = dat
 
-Event.addListener("Player.NewInputContent", "dat")
+Event.addListener("Player.NewInputContent", "dat", dat)

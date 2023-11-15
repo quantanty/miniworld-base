@@ -50,7 +50,8 @@ function Event.registerAll()
 end
 
 
-function Event.addListener (event, funcname)
+function Event.addListener (event, funcname, func)
+    if Function[funcname] == nil then Function[funcname] = func end
     local registerd = Event.regiterd
     local exist = false
     for i = 1, #registerd do
