@@ -101,6 +101,9 @@ local Event = {
     ["Particle.Projectile.OnCreate"] = {},
     ["UI.Button.click"] = {},
     ["UI.Touch.begin"] = {},
+    ["UI.Hide"] = {},
+    ["UI.LostFocus"] = {},
+    ["UI.Show"] = {},
     registered = {}
 }
 
