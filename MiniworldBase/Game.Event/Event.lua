@@ -1,6 +1,5 @@
-local v = _G
 local ScriptSupportEvent = ScriptSupportEvent
-local Function = v.Function
+local Function = {}
 
 local Event = {
     ["Weather.Changed"] = {},
@@ -29,32 +28,24 @@ local Event = {
     registered = {}
 }
 
+---Register an event, be ready to add it's listeners
+---@param eventname string
 function Event.register(eventname)
-    Chat:sendSystemMsg("registering "..eventname.."...")
     ScriptSupportEvent:registerEvent(eventname, function (event)
         local funcs = Event[eventname]
         for i = 1, #funcs do
             Function[funcs[i]](event)
         end
     end)
-    Chat:sendSystemMsg("registration finished")
     Event.registered[#Event.registered+1] = eventname
-    Chat:sendSystemMsg(""..eventname)
-    Chat:sendSystemMsg(""..#Event.registered)
+    print(string.format("Registration finished, event name: %s", eventname))
+    print(string.format("# Event registered: %d", #Event.registered))
 end
 
--- function Event.registerAll()
---     for eventname, v in ipairs(Event) do
---         ScriptSupportEvent:registerEvent(eventname, function (event)
---             local funcs = Event[eventname]
---             for i = 1, #funcs do
---                 Function[funcs[i]](event)
---             end
---         end)
---     end
--- end
-
-
+---Add a listener function to an event (must register that event first)
+---@param eventname string
+---@param funcname string
+---@param func function
 function Event.addListener (eventname, funcname, func)
     if Function[funcname] == nil then Function[funcname] = func end
     local registered = Event.registered
@@ -70,8 +61,11 @@ function Event.addListener (eventname, funcname, func)
     end
 end
 
-function Event.removeListener (event, funcname)
-    local funcs = Event[event]
+---Remove a listener function from an event
+---@param eventname string
+---@param funcname string
+function Event.removeListener (eventname, funcname)
+    local funcs = Event[eventname]
     for i = 1, #funcs do
         if funcs[i] == funcname then
             table.remove(funcs, i)
