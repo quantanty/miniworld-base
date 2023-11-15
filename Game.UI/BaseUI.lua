@@ -155,7 +155,7 @@ end
 function BaseUI:rotateElementAll(elementid, rotate)
     local l, n, array = World:getAllPlayers(-1)
     for i, playerid in ipairs(array) do
-        Customui:roatteElement(playerid, self.uiid, elementid, rotate)
+        Customui:rotateElement(playerid, self.uiid, elementid, rotate)
     end
 end
 

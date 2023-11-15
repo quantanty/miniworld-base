@@ -26,44 +26,48 @@ local Event = {
     ["Player.NewInputContent"] = {},
     ["UI.Button.click"] = {},
     ["UI.Touch.begin"] = {},
-    regiterd = {}
+    registered = {}
 }
 
-function Event.register(eventString)
-    ScriptSupportEvent:registerEvent(eventString, function (event)
-        local funcs = Event[eventString]
+function Event.register(eventname)
+    Chat:sendSystemMsg("registering "..eventname.."...")
+    ScriptSupportEvent:registerEvent(eventname, function (event)
+        local funcs = Event[eventname]
         for i = 1, #funcs do
             Function[funcs[i]](event)
         end
     end)
+    Chat:sendSystemMsg("registration finished")
+    Event.registered[#Event.registered+1] = eventname
+    Chat:sendSystemMsg(""..eventname)
+    Chat:sendSystemMsg(""..#Event.registered)
 end
 
-function Event.registerAll()
-    for eventString, v in ipairs(Event) do
-        ScriptSupportEvent:registerEvent(eventString, function (event)
-            local funcs = Event[eventString]
-            for i = 1, #funcs do
-                Function[funcs[i]](event)
-            end
-        end)
-    end
-end
+-- function Event.registerAll()
+--     for eventname, v in ipairs(Event) do
+--         ScriptSupportEvent:registerEvent(eventname, function (event)
+--             local funcs = Event[eventname]
+--             for i = 1, #funcs do
+--                 Function[funcs[i]](event)
+--             end
+--         end)
+--     end
+-- end
 
 
-function Event.addListener (event, funcname, func)
+function Event.addListener (eventname, funcname, func)
     if Function[funcname] == nil then Function[funcname] = func end
-    local registerd = Event.regiterd
+    local registered = Event.registered
     local exist = false
-    for i = 1, #registerd do
-        if registerd[i] == event then
+    for i = 1, #registered do
+        if registered[i] == eventname then
             exist = true break
         end
     end
-    if not exist then
-        Event.register(event)
-        registerd[#registerd+1] = event
+    if exist then
+        Chat:sendSystemMsg("add "..funcname)
+        table.insert(Event[eventname], funcname)
     end
-    table.insert(Event[event], funcname)
 end
 
 function Event.removeListener (event, funcname)
