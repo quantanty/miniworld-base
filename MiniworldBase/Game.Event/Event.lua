@@ -110,6 +110,14 @@ local Event = {
 ---Register an event, be ready to add it's listeners
 ---@param eventname string
 function Event.register(eventname)
+    local registered = Event.registered
+    local exist = false
+    for i = 1, #registered do
+        if registered[i] == eventname then
+            exist = true break
+        end
+    end
+    if exist then return end
     ScriptSupportEvent:registerEvent(eventname, function (event)
         local funcs = Event[eventname]
         for i = 1, #funcs do
