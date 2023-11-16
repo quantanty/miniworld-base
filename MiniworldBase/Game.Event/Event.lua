@@ -143,6 +143,13 @@ function Event.addListener (eventname, funcname, func)
         end
     end
     if exist then
+        local funcs = Event[eventname]
+        for i = 1, #funcs do
+            if funcs[i] == funcname then
+                Chat:sendSystemMsg(funcname.." is already added")
+                return
+            end
+        end
         Chat:sendSystemMsg("add "..funcname)
         table.insert(Event[eventname], funcname)
     end
