@@ -4,6 +4,25 @@ At this point, class `ScriptSupportEvent` of Mini World APIs only provides the e
 
 To overcome this difficulty, MiniwordBase provides APIs that can register event and cancel.
 
+## What makes MWBase so special?
+- **Register and remove event at anytime (even after compilation, which `ScriptSupportEvent:registerEvent` cannot do)**
+- **A function can remove event itself**
+
+```lua
+local Event = _G.Event
+Event.register("Player.NewInputContent")
+
+local function player_chat(event)
+    Chat:sendSystemMsg(""..event.eventobjid..": "..event.content)
+
+    -- this function can remove itself from event handler
+    -- the event handler won't call it anymore
+    Event.removeListener("Player.NewInputContent", "player_chat")
+end
+
+Event.addListener("Player.NewInputContnent", "player_chat", player_chat)
+```
+
 ## Document
 Here is Markdown [Document](./docs/) in folder ./docs/
 
