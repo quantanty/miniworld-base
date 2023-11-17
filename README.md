@@ -1,4 +1,4 @@
-# Mini World Base Script v1.1
+# Mini World Base Script v1.2
 
 At this point, class `ScriptSupportEvent` of Mini World APIs only provides the event registration procedure `ScriptSupportEvent:registerEvent` and not the cancellation procedure. Therefore, it's very difficult for devs to code.
 
