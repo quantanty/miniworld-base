@@ -120,8 +120,13 @@ function Event.register(eventname)
     if exist then return end
     ScriptSupportEvent:registerEvent(eventname, function (event)
         local funcs = Event[eventname]
+        local funcs_do = {}
         for i = 1, #funcs do
-            Function[funcs[i]](event)
+            funcs_do[i] = Function[funcs[i]]
+        end
+
+        for i = 1, #funcs_do do
+            funcs_do[i](event)
         end
     end)
     Event.registered[#Event.registered+1] = eventname
@@ -146,12 +151,13 @@ function Event.addListener (eventname, funcname, func)
         local funcs = Event[eventname]
         for i = 1, #funcs do
             if funcs[i] == funcname then
-                Chat:sendSystemMsg(funcname.." is already added")
+                -- Chat:sendSystemMsg(funcname.." is already added")
                 return
             end
         end
-        Chat:sendSystemMsg("add "..funcname)
+        -- Chat:sendSystemMsg("add "..funcname)
         table.insert(Event[eventname], funcname)
+        -- print("ADD: "..eventname.." +++++ "..funcname)
     end
 end
 
@@ -159,13 +165,16 @@ end
 ---@param eventname string
 ---@param funcname string
 function Event.removeListener (eventname, funcname)
+    -- print("remove ------- "..eventname..", "..funcname)
     local funcs = Event[eventname]
     for i = 1, #funcs do
         if funcs[i] == funcname then
+            -- print("REMOVE: "..eventname.." ----- "..funcname)
             table.remove(funcs, i)
             break
         end
     end
+    -- print("remove done")
 end
 
 _G.Event = Event
