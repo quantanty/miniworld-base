@@ -107,22 +107,28 @@ local Event = {
     registered = {}
 }
 
+local function check_exist(tbl, el)
+    for i = 1, #tbl do
+        if tbl[i] == el then
+            return i
+        end
+    end
+    return nil
+end
+
 ---Register an event, be ready to add it's listeners
 ---@param eventname string
 function Event.register(eventname)
+    assert(Event[eventname]~=nil, string.format("Event %s is not supported", eventname))
     local registered = Event.registered
-    local exist = false
-    for i = 1, #registered do
-        if registered[i] == eventname then
-            exist = true break
-        end
-    end
-    if exist then return end
+    local loc = check_exist(registered, eventname)
+    if loc then return end
+
     ScriptSupportEvent:registerEvent(eventname, function (event)
         local funcs = Event[eventname]
         local funcs_do = {}
         for i = 1, #funcs do
-            funcs_do[i] = Function[funcs[i]]
+            funcs_do[i] = type(funcs[i]) == "function" and funcs[i] or Function[funcs[i]]
         end
 
         for i = 1, #funcs_do do
@@ -130,51 +136,93 @@ function Event.register(eventname)
         end
     end)
     Event.registered[#Event.registered+1] = eventname
-    print(string.format("Registration finished, event name: %s", eventname))
-    print(string.format("# Event registered: %d", #Event.registered))
 end
 
 ---Add a listener function to an event (must register that event first)
 ---@param eventname string
 ---@param funcname string
 ---@param func function
-function Event.addListener (eventname, funcname, func)
-    if Function[funcname] == nil then Function[funcname] = func end
+function Event.addListener(eventname, funcname, func)
     local registered = Event.registered
-    local exist = false
-    for i = 1, #registered do
-        if registered[i] == eventname then
-            exist = true break
-        end
+    local loc = check_exist(registered, eventname)
+    if not loc then
+        Event.register(eventname)
     end
-    if exist then
-        local funcs = Event[eventname]
-        for i = 1, #funcs do
-            if funcs[i] == funcname then
-                -- Chat:sendSystemMsg(funcname.." is already added")
-                return
-            end
-        end
-        -- Chat:sendSystemMsg("add "..funcname)
-        table.insert(Event[eventname], funcname)
-        -- print("ADD: "..eventname.." +++++ "..funcname)
+
+    local funcs = Event[eventname]
+    loc = check_exist(funcs, funcname)
+    if not loc then
+        Function[funcname] = func
+        table.insert(funcs, funcname)
     end
+end
+
+---Add listener, no need key
+---@param eventname string
+---@param func function
+function Event.addListener_noKey(eventname, func)
+    local registered = Event.registered
+    local loc = check_exist(registered, eventname)
+    if not loc then
+        Event.register(eventname)
+    end
+
+    local funcs = Event[eventname]
+    loc = check_exist(funcs, func)
+    if not loc then
+        table.insert(funcs, func)
+    end
+end
+
+---Add listener without address
+---
+---But it's pair need to be added later `Event.addPair("my_function", my_function)`
+---@param eventname string
+---@param funcname function
+function Event.addListener_noAddress(eventname, funcname)
+    local registered = Event.registered
+    local loc = check_exist(registered, eventname)
+    if not loc then
+        Event.register(eventname)
+    end
+
+    local funcs = Event[eventname]
+    loc = check_exist(funcs, funcname)
+    if not loc then
+        table.insert(funcs, funcname)
+    end
+end
+
+---Add pair of function
+---
+---`Function["my_function"] = my_function`
+---@param funcname string
+---@param func function
+function Event.addPair(funcname, func)
+    Function[funcname] = func
 end
 
 ---Remove a listener function from an event
 ---@param eventname string
 ---@param funcname string
-function Event.removeListener (eventname, funcname)
-    -- print("remove ------- "..eventname..", "..funcname)
+function Event.removeListener(eventname, funcname)
     local funcs = Event[eventname]
-    for i = 1, #funcs do
-        if funcs[i] == funcname then
-            -- print("REMOVE: "..eventname.." ----- "..funcname)
-            table.remove(funcs, i)
-            break
-        end
+    local loc = check_exist(funcs, funcname)
+    if loc then
+        table.remove(funcs, loc)
     end
-    -- print("remove done")
+end
+
+
+---Remove a listener function from an event
+---@param eventname string
+---@param func function
+function Event.removeListener_address(eventname, func)
+    local funcs = Event[eventname]
+    local loc = check_exist(funcs, func)
+    if loc then
+        table.remove(funcs, loc)
+    end
 end
 
 _G.Event = Event
