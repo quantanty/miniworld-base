@@ -1,4 +1,4 @@
-# Mini World Base Script v1.2
+# Mini World Base Script v1.3
 
 At this point, class `ScriptSupportEvent` of Mini World APIs only provides the event registration procedure `ScriptSupportEvent:registerEvent` and not the cancellation procedure. Therefore, it's very difficult for devs to code.
 
@@ -7,20 +7,20 @@ To overcome this difficulty, MiniwordBase provides APIs that can register event 
 ## What makes MWBase so special?
 - **Register and remove event at anytime (even after compilation, which `ScriptSupportEvent:registerEvent` cannot do)**
 - **A function can remove event itself**
+- **2 functions can [remove or add] each other**
 
 ```lua
 local Event = _G.Event
-Event.register("Player.NewInputContent")
 
 local function player_chat(event)
     Chat:sendSystemMsg(""..event.eventobjid..": "..event.content)
 
     -- this function can remove itself from event handler
     -- the event handler won't call it anymore
-    Event.removeListener("Player.NewInputContent", "player_chat")
+    Event.removeListener_address("Player.NewInputContent", player_chat)
 end
 
-Event.addListener("Player.NewInputContnent", "player_chat", player_chat)
+Event.addListener_noKey("Player.NewInputContent", player_chat)
 ```
 
 ## Document
@@ -33,12 +33,6 @@ Import modules via environment variable `_G`
 local v = _G
 local Event = v.Event
 local BaseUI = v.BaseUI
-```
-
-Register events
-```lua
-Event.register("Game.Run")
-Event.register("Player.NewInputContent")
 ```
 
 Define a BaseUI object and some components from ID, use`BaseUI:new()`
