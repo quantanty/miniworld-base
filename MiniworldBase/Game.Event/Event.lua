@@ -178,7 +178,7 @@ end
 ---
 ---But it's pair need to be added later `Event.addPair("my_function", my_function)`
 ---@param eventname string
----@param funcname function
+---@param funcname string
 function Event.addListener_noAddress(eventname, funcname)
     local registered = Event.registered
     local loc = check_exist(registered, eventname)
